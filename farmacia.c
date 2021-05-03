@@ -29,7 +29,7 @@ do
      printf(" 1. Clientes\n");
      printf(" 2. Medicamentos\n");
      printf(" 3. Vendas\n");
-     printf(" 4." RED " Sair\n\n" RESET);
+     printf(" 9." RED " Sair\n\n" RESET);
      printf(GREEN"=================\n"RESET);
      scanf("%s",&escolhastr);
 
@@ -37,22 +37,19 @@ do
 
      switch (escolha)
      {
-     case 1:
-          clientes();
+     case 1: clientes();
                break;
-     case 2:
-          medicamentos();
+     case 2: medicamentos();
                break;
-     case 3:
-          vendas();
+     case 3: vendas();
                break;
-     case 4: sair();
-          break;
-          default: input_invalido();
-               sleep(1);
-                         break;
+     case 9: sair();
+               break;
+     default: input_invalido();
+              sleep(1);
+               break;
      }
-     } while (escolha != 4);
+} while (escolha != 9);
 }
 
 void clientes() {
