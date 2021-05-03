@@ -28,32 +28,36 @@ do
      printf(GREEN"======Menu======\n\n"RESET);
      printf(" 1. Clientes\n");
      printf(" 2. Medicamentos\n");
-     printf(" 3. Medicamentos\n");
+     printf(" 3. Vendas\n");
      printf(" 4." RED " Sair\n\n" RESET);
-     printf(GREEN"================\n"RESET);
+     printf(GREEN"=================\n"RESET);
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
 
      switch (escolha)
      {
-     case 1: clientes();
+     case 1:
+          clientes();
                break;
-     case 2: printf("Opcao 2\n\n");
-             sleep(1);
+     case 2:
+          medicamentos();
                break;
-     case 3: sair();
+     case 3:
+          vendas();
+               break;
+     case 4: sair();
           break;
-     default: input_invalido();
-              sleep(1);
-                break;
+          default: input_invalido();
+               sleep(1);
+                         break;
      }
-     } while (escolha != 3);
+     } while (escolha != 4);
 }
 
 void clientes() {
 
-    char escolhastr[4];
+    char escolhastr[3];
      int escolha;
 do
 {
@@ -64,7 +68,91 @@ do
      printf(" 2. Editar Cliente\n");
      printf(" 3. Eliminar Cliente\n");
      printf(" 4." RED " Voltar\n\n" RESET);
-     printf(GREEN"================\n"RESET);
+     printf(GREEN"====================\n"RESET);
+     scanf("%s",&escolhastr);
+
+     escolha = atoi(escolhastr);
+
+     switch (escolha)
+     {
+     case 1:
+          printf("Criar\n\n");
+          sleep(1);
+               break;
+     case 2:
+          printf("Editar\n\n");
+          sleep(1);
+               break;
+     case 3:
+          printf("Eliminar\n\n");
+          sleep(1);
+                break;
+     case 4: sair();
+          break;
+          default: input_invalido();
+          sleep(1);
+               break;
+     }
+     } while (escolha != 4);
+
+}
+
+void medicamentos() {
+
+    char escolhastr[3];
+     int escolha;
+do
+{
+     system("cls");
+     nome_programa();
+     printf(GREEN"======Medicamentos======\n\n"RESET);
+     printf(" 1. Criar Medicamento\n");
+     printf(" 2. Editar Medicamento\n");
+     printf(" 3. Eliminar Medicamento\n");
+     printf(" 4." RED " Voltar\n\n" RESET);
+     printf(GREEN"========================\n"RESET);
+     scanf("%s",&escolhastr);
+
+     escolha = atoi(escolhastr);
+
+     switch (escolha)
+     {
+     case 1:
+          printf("Criar\n\n");
+          sleep(1);
+               break;
+     case 2:
+          printf("Editar\n\n");
+          sleep(1);
+               break;
+     case 3:
+          printf("Eliminar\n\n");
+          sleep(1);
+                break;
+     case 4: sair();
+          break;
+          default: input_invalido();
+          sleep(1);
+               break;
+     }
+     } while (escolha != 4);
+
+}
+
+void vendas() {
+
+    char escolhastr[3];
+     int escolha;
+do
+{
+     system("cls");
+     nome_programa();
+     printf(GREEN"======Vendas======\n\n"RESET);
+     printf(" 1. Criar Venda\n");
+     printf(" 2. Editar Venda\n");
+     printf(" 3. Eliminar Venda\n");
+     printf(" 4." RED " Voltar\n\n" RESET);
+     printf(GREEN"==================\n"RESET);
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
