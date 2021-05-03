@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <conio.h>
 
-//cores
+#pragma region Cores
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -11,12 +11,18 @@
 #define MAGENTA "\x1b[35m"
 #define CYAN    "\x1b[36m"
 #define RESET   "\x1b[0m"
+#pragma endregion
 
 //funções reutilizaveis
-void nome_programa(){printf(YELLOW "=Farmacia Toze=\n\n" RESET);}
+#pragma region Funcoes
+void nome_programa(){printf(YELLOW ">=Farmacia Toze=<\n\n" RESET);}
 void input_invalido(){printf(RED "Erro. Introduza um valor valido.\n" RESET);}
 void sair(){printf(YELLOW "Volte sempre!" RESET);}
+void voltar(){printf(YELLOW "A voltar..." RESET);}
 
+#pragma endregion
+
+#pragma region Main
 int main(void)
 {
      char escolhastr[3];
@@ -28,9 +34,10 @@ do
      printf(GREEN"======Menu======\n\n"RESET);
      printf(" 1. Clientes\n");
      printf(" 2. Medicamentos\n");
-     printf(" 3. Vendas\n");
+     printf(" 3. Vendas\n\n");
+     printf(GREEN"================\n\n"RESET);
      printf(" 9." RED " Sair\n\n" RESET);
-     printf(GREEN"=================\n"RESET);
+     printf(GREEN"================\n"RESET);
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
@@ -51,7 +58,9 @@ do
      }
 } while (escolha != 9);
 }
+#pragma endregion
 
+#pragma region Menu Clientes
 void clientes() {
 
     char escolhastr[3];
@@ -63,8 +72,9 @@ do
      printf(GREEN"======Clientes======\n\n"RESET);
      printf(" 1. Criar Cliente\n");
      printf(" 2. Editar Cliente\n");
-     printf(" 3. Eliminar Cliente\n");
-     printf(" 4." RED " Voltar\n\n" RESET);
+     printf(" 3. Eliminar Cliente\n\n");
+     printf(GREEN"====================\n\n"RESET);
+     printf(" 4." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"====================\n"RESET);
      scanf("%s",&escolhastr);
 
@@ -84,7 +94,7 @@ do
           printf("Eliminar\n\n");
           sleep(1);
                 break;
-     case 4: sair();
+     case 4: voltar();        
           break;
           default: input_invalido();
           sleep(1);
@@ -93,7 +103,9 @@ do
      } while (escolha != 4);
 
 }
+#pragma endregion
 
+#pragma region Menu Medicamentos
 void medicamentos() {
 
     char escolhastr[3];
@@ -105,8 +117,9 @@ do
      printf(GREEN"======Medicamentos======\n\n"RESET);
      printf(" 1. Criar Medicamento\n");
      printf(" 2. Editar Medicamento\n");
-     printf(" 3. Eliminar Medicamento\n");
-     printf(" 4." RED " Voltar\n\n" RESET);
+     printf(" 3. Eliminar Medicamento\n\n");
+     printf(GREEN"========================\n\n"RESET);
+     printf(" 4." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"========================\n"RESET);
      scanf("%s",&escolhastr);
 
@@ -126,7 +139,7 @@ do
           printf("Eliminar\n\n");
           sleep(1);
                 break;
-     case 4: sair();
+     case 4: voltar();
           break;
           default: input_invalido();
           sleep(1);
@@ -135,7 +148,9 @@ do
      } while (escolha != 4);
 
 }
+#pragma endregion
 
+#pragma region Menu Vendas
 void vendas() {
 
     char escolhastr[3];
@@ -147,9 +162,10 @@ do
      printf(GREEN"======Vendas======\n\n"RESET);
      printf(" 1. Criar Venda\n");
      printf(" 2. Editar Venda\n");
-     printf(" 3. Eliminar Venda\n");
-     printf(" 4." RED " Voltar\n\n" RESET);
-     printf(GREEN"==================\n"RESET);
+     printf(" 3. Eliminar Venda\n\n");
+     printf(GREEN"====================\n\n"RESET);
+     printf(" 4." GREEN " <<" YELLOW " Voltar\n\n" RESET);
+     printf(GREEN"====================\n"RESET);
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
@@ -168,7 +184,7 @@ do
           printf("Eliminar\n\n");
           sleep(1);
                 break;
-     case 4: sair();
+     case 4: voltar();
           break;
           default: input_invalido();
           sleep(1);
@@ -177,3 +193,4 @@ do
      } while (escolha != 4);
 
 }
+#pragma endregion
