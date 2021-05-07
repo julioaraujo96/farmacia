@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <conio.h>
 
+//Cores
 #pragma region Cores
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -13,6 +14,13 @@
 #define RESET   "\x1b[0m"
 #pragma endregion
 
+//Variaveis globais
+#pragma region  Variaveis Globais
+char nome_ficheiro[100];
+char cliente[100] = "Cliente";
+int limite = 9999;
+#pragma endregion
+
 //funções reutilizaveis
 #pragma region Funcoes
 void nome_programa(){printf(YELLOW ">=Farmacia Toze=<\n\n" RESET);}
@@ -21,7 +29,7 @@ void sair(){printf(YELLOW "Volte sempre!" RESET);}
 void voltar(){printf(YELLOW "A voltar..." RESET);}
 
 #pragma endregion
-
+//Menus
 #pragma region Menus
 
 #pragma region Main
@@ -65,6 +73,7 @@ do
 }
 #pragma endregion
 
+#pragma region Fornecedores
 void fornecedores(){
      char escolhastr[3];
      int escolha;
@@ -105,6 +114,7 @@ do
      }
      } while (escolha != 9);
 }
+#pragma endregion
 
 #pragma region Menu Clientes
 void clientes() {
@@ -241,13 +251,51 @@ do
 #pragma endregion
 
 #pragma endregion
-
+//Metodos
 #pragma region Metodos Menu Cliente
+
+float verificar_id(){
+     FILE *TXT;
+     for (float i = 1; i < limite; i++)
+     {
+          sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
+          if ((TXT = fopen(nome_ficheiro, "r")) == NULL)
+          {
+               fclose(TXT);
+               return i;
+          }
+     }
+}
+
 void criar_cliente(){
+
+     system("cls");
+     float i;
+
+     //verificar os ficheiros existentes
+     i = verificar_id();
+
+     //Pedir nome do cliente
      char nome_cliente[256];
      printf("Insira o nome do cliente que pretende adicionar: \n");
      scanf("%s", nome_cliente);
 
-     printf("Nome inserido: %s", nome_cliente);
+     //Abrir ficheiro
+     FILE *ficheiro;
+
+     //criar nome do ficheiro/concatenar
+     sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
+     printf("\n%s", nome_ficheiro);
+      
+      //Escrever para o ficheiro
+     ficheiro = fopen(nome_ficheiro, "w");
+
+
+     fprintf(ficheiro,"%.0f\n%s",i, nome_cliente);  
+     fclose(ficheiro);
+
+
+     printf("\nNome inserido: %s\n", nome_cliente);
+     sleep(1);
 }
 #pragma endregion
