@@ -22,6 +22,8 @@ void voltar(){printf(YELLOW "A voltar..." RESET);}
 
 #pragma endregion
 
+#pragma region Menus
+
 #pragma region Main
 int main(void)
 {
@@ -82,9 +84,8 @@ do
 
      switch (escolha)
      {
-     case 1:
-          printf("Criar\n\n");
-          sleep(1);
+     case 1:criar_cliente();
+            sleep(1);
                break;
      case 2:
           printf("Editar\n\n");
@@ -192,5 +193,17 @@ do
      }
      } while (escolha != 4);
 
+}
+#pragma endregion
+
+#pragma endregion
+
+#pragma region Metodos Menu Cliente
+void criar_cliente(){
+     char nome_cliente[256];
+     printf("Insira o nome do cliente que pretende adicionar: \n");
+     scanf("%s", nome_cliente);
+
+     printf("Nome inserido: %s", nome_cliente);
 }
 #pragma endregion
