@@ -143,6 +143,7 @@ do
                break;
      case 2:
           printf("Editar\n\n");
+          listar_cliente();
           sleep(1);
                break;
      case 3:
@@ -297,5 +298,16 @@ void criar_cliente(){
 
      printf("\nNome inserido: %s\n", nome_cliente);
      sleep(1);
+}
+
+void listar_cliente(){
+     system("cls");
+     char linha[100];
+     FILE *TXT;
+    
+
+     fscanf(TXT, "%[^\n]", linha);
+     printf("ID:\n%s", linha);
+     fclose(TXT);
 }
 #pragma endregion
