@@ -27,7 +27,8 @@ void nome_programa(){printf(YELLOW ">=Farmacia Toze=<\n\n" RESET);}
 void input_invalido(){printf(RED "Erro. Introduza um valor valido.\n" RESET);}
 void sair(){printf(YELLOW "Volte sempre!" RESET);}
 void voltar(){printf(YELLOW "A voltar..." RESET);}
-
+void clear(){ system("cls");}
+void escolher(){printf(CYAN"\nEscolha: "RESET);}
 #pragma endregion
 //Menus
 #pragma region Menus
@@ -39,7 +40,7 @@ int main(void)
      int escolha;
 do
 {
-     system("cls");
+     clear();
      nome_programa();
      printf(GREEN"======Menu======\n\n"RESET);
      printf(" 1. Clientes\n");
@@ -49,6 +50,7 @@ do
      printf(GREEN"================\n\n"RESET);
      printf(" 9." RED " Sair\n\n" RESET);
      printf(GREEN"================\n"RESET);
+     escolher();
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
@@ -70,6 +72,7 @@ do
                break;
      }
 } while (escolha != 9);
+
 }
 #pragma endregion
 
@@ -79,7 +82,7 @@ void fornecedores(){
      int escolha;
 do
 {
-     system("cls");
+     clear();
      nome_programa();
      printf(GREEN"======Fornecedores======\n\n"RESET);
      printf(" 1. Criar Fornecedor\n");
@@ -123,7 +126,7 @@ void clientes() {
      int escolha;
 do
 {
-     system("cls");
+     clear();
      nome_programa();
      printf(GREEN"======Clientes======\n\n"RESET);
      printf(" 1. Criar Cliente\n");
@@ -144,7 +147,7 @@ do
      case 2:
           printf("Editar\n\n");
           listar_cliente();
-          sleep(1);
+          sleep(2);
                break;
      case 3:
           printf("Eliminar\n\n");
@@ -168,7 +171,7 @@ void medicamentos() {
      int escolha;
 do
 {
-     system("cls");
+     clear();
      nome_programa();
      printf(GREEN"======Medicamentos======\n\n"RESET);
      printf(" 1. Criar Medicamento\n");
@@ -213,7 +216,7 @@ void vendas() {
      int escolha;
 do
 {
-     system("cls");
+     clear();
      nome_programa();
      printf(GREEN"======Vendas======\n\n"RESET);
      printf(" 1. Criar Venda\n");
@@ -270,7 +273,7 @@ float verificar_id(){
 
 void criar_cliente(){
 
-     system("cls");
+     clear();
      float i;
 
      //verificar os ficheiros existentes
@@ -301,13 +304,30 @@ void criar_cliente(){
 }
 
 void listar_cliente(){
-     system("cls");
-     char linha[100];
-     FILE *TXT;
-    
 
-     fscanf(TXT, "%[^\n]", linha);
-     printf("ID:\n%s", linha);
-     fclose(TXT);
+     clear();
+     char linha[100];
+     char *result;
+     FILE *TXT;
+     
+    for (float i = 1; i < 9999; i++)
+    {
+      sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) != NULL){
+               while (!feof(TXT))
+               {
+                    result = fgets(linha, 100, TXT);
+                    if(result)
+                         printf("\t%s", linha);
+                }
+                printf("\n\t=======\n");
+         fclose(TXT);
+      }else
+      {
+           getch();
+           return;
+      }
+    }
 }
 #pragma endregion
