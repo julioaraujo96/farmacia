@@ -2,6 +2,7 @@
 //#include <stdbool.h> --> usar bools
 #include <stdio.h>
 #include <conio.h>
+//#include <windows.h>
 
 //Cores
 #pragma region Cores
@@ -25,10 +26,11 @@ int limite = 9999;
 #pragma region Funcoes
 void nome_programa(){printf(YELLOW ">=Farmacia Toze=<\n\n" RESET);}
 void input_invalido(){printf(RED "Erro. Introduza um valor valido.\n" RESET);}
-void sair(){printf(YELLOW "Volte sempre!" RESET);}
+void sair(){printf(YELLOW "\nVolte sempre!\n" RESET);}
 void voltar(){printf(YELLOW "A voltar..." RESET);}
 void clear(){ system("cls");}
 void escolher(){printf(CYAN"\nEscolha: "RESET);}
+//void messagebox(){MessageBox(NULL, TEXT("Mensagem"),TEXT("Console Error"), MB_OK);}  se quiser uma messagebox
 #pragma endregion
 //Menus
 #pragma region Menus
@@ -38,6 +40,7 @@ int main(void)
 {
      char escolhastr[3];
      int escolha;
+
 do
 {
      clear();
@@ -131,7 +134,7 @@ do
      printf(GREEN"======Clientes======\n\n"RESET);
      printf(" 1. Criar Cliente\n");
      printf(" 2. Editar Cliente\n");
-     printf(" 3. Eliminar Cliente\n\n");
+     printf(" 3. Listar Clientes\n\n");
      printf(GREEN"====================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"====================\n"RESET);
@@ -146,12 +149,12 @@ do
                break;
      case 2:
           printf("Editar\n\n");
-          listar_cliente();
+          editar_cliente();
           sleep(2);
                break;
      case 3:
-          printf("Eliminar\n\n");
-          sleep(1);
+          listar_cliente();
+          getch();
                 break;
      case 9: voltar();        
           break;
@@ -297,7 +300,7 @@ void criar_cliente(){
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
 
-     fprintf(ficheiro,"%.0f\n%s",i, nome_cliente);  
+     fprintf(ficheiro,"ID:%.0f\nNome:%s",i, nome_cliente);  
      fclose(ficheiro);
 
      printf("\nCliente inserido: " RESET);
@@ -314,7 +317,7 @@ void listar_cliente(){
      FILE *TXT;
      printf(CYAN"Lista de Clientes:\n"RESET);
      printf(YELLOW"===============================\n"RESET);
-    for (float i = 1; i < 9999; i++)
+    for (float i = 1; i < limite; i++)
     {
       sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
 
@@ -329,9 +332,15 @@ void listar_cliente(){
          fclose(TXT);
       }else
       {
-           getch();
            return;
       }
     }
 }
+
+void editar_cliente(){
+     listar_cliente();
+     float i;
+     printf("Insira o ID do cliente que pretende editar:");
+     scanf("%f", i);
+};
 #pragma endregion
