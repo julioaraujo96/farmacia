@@ -312,7 +312,8 @@ void listar_cliente(){
      char linha[100];
      char *result;
      FILE *TXT;
-     
+     printf(CYAN"Lista de Clientes:\n"RESET);
+     printf(YELLOW"===============================\n"RESET);
     for (float i = 1; i < 9999; i++)
     {
       sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
@@ -322,9 +323,9 @@ void listar_cliente(){
                {
                     result = fgets(linha, 100, TXT);
                     if(result)
-                         printf("\t%s", linha);
+                         printf(GREEN"----> "RESET "%s", linha);
                 }
-                printf("\n\t=======\n");
+               printf(YELLOW"\n===============================\n"RESET);
          fclose(TXT);
       }else
       {
