@@ -281,7 +281,8 @@ void criar_cliente(){
 
      //Pedir nome do cliente
      char nome_cliente[256];
-     printf("Insira o nome do cliente que pretende adicionar: \n");
+     printf("\tInsira o nome do cliente que pretende adicionar: \n\n");
+     printf(CYAN"Nome Cliente: "RESET);
      scanf("%s", nome_cliente);
 
      //Abrir ficheiro
@@ -289,17 +290,19 @@ void criar_cliente(){
 
      //criar nome do ficheiro/concatenar
      sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
-     printf("\n%s", nome_ficheiro);
+     printf(YELLOW"\n==============================="RESET);
+     printf("\nFicheiro Criado: ");
+     printf(GREEN "%s" RESET, nome_ficheiro);
       
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
 
-
      fprintf(ficheiro,"%.0f\n%s",i, nome_cliente);  
      fclose(ficheiro);
 
-
-     printf("\nNome inserido: %s\n", nome_cliente);
+     printf("\nCliente inserido: " RESET);
+     printf(GREEN "%s" RESET, nome_cliente);
+     printf(YELLOW"\n==============================="RESET);
      sleep(1);
 }
 
