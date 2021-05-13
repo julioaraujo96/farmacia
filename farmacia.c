@@ -26,6 +26,7 @@ int limite = 9999;
 #pragma region Funcoes
 void nome_programa(){printf(YELLOW ">=Farmacia Toze=<\n\n" RESET);}
 void input_invalido(){printf(RED "Erro. Introduza um valor valido.\n" RESET);}
+void sucesso(){printf(GREEN"Efetuado com sucesso."RESET);}
 void sair(){printf(YELLOW "\nVolte sempre!\n" RESET);}
 void voltar(){printf(YELLOW "A voltar..." RESET);}
 void clear(){ system("cls");}
@@ -147,10 +148,8 @@ do
      case 1:criar_cliente();
             sleep(1);
                break;
-     case 2:
-          printf("Editar\n\n");
-          editar_cliente();
-          sleep(2);
+     case 2: editar_cliente();
+             getch();
                break;
      case 3:
           listar_cliente();
@@ -332,15 +331,35 @@ void listar_cliente(){
          fclose(TXT);
       }else
       {
-           return;
+          return;
       }
     }
 }
 
 void editar_cliente(){
-     listar_cliente();
      float i;
-     printf("Insira o ID do cliente que pretende editar:");
-     scanf("%f", i);
+     FILE *TXT;
+     char nome_cliente[256];
+     listar_cliente();
+
+     printf(CYAN"\nInsira o ID do cliente que pretende editar:\n"RESET);
+     scanf("%f", &i);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+     printf(CYAN"\nInsira um novo nome:\n"RESET);
+     scanf("%s", nome_cliente);
+
+     TXT = fopen(nome_ficheiro,"w");
+
+     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_cliente);  
+     fclose(TXT);
+     printf("\n");
+     sucesso();
+
+     
 };
 #pragma endregion
