@@ -31,6 +31,7 @@ void sucesso(){printf(GREEN"Efetuado com sucesso."RESET);}
 void sair(){printf(YELLOW "\nVolte sempre!\n" RESET);}
 void voltar(){printf(YELLOW "A voltar..." RESET);}
 void clear(){ system("cls");}
+void discard(){scanf("%*c");}
 void escolher(){printf(CYAN"\nEscolha: "RESET);}
 //void messagebox(){MessageBox(NULL, TEXT("Mensagem"),TEXT("Console Error"), MB_OK);}  se quiser uma messagebox
 #pragma endregion
@@ -288,7 +289,9 @@ void criar_cliente(){
      char nome_cliente[256];
      printf("\tInsira o nome do cliente que pretende adicionar: \n\n");
      printf(CYAN"Nome Cliente: "RESET);
-     scanf("%s", nome_cliente);
+     discard();
+     fgets(nome_cliente, 100, stdin);
+     //scanf("%s", nome_cliente);
 
      //Abrir ficheiro
      FILE *ficheiro;
@@ -393,7 +396,9 @@ void criar_medicamento(){
      char nome_medicamento[256];
      printf("\tInsira o nome do medicamento que pretende adicionar: \n\n");
      printf(CYAN"Nome Medicamento: "RESET);
-     scanf("%s", nome_medicamento);
+     discard();
+     fgets(nome_medicamento, 100, stdin);
+
 
      //Abrir ficheiro
      FILE *ficheiro;
