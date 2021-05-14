@@ -19,6 +19,7 @@
 #pragma region  Variaveis Globais
 char nome_ficheiro[100];
 char cliente[100] = "Cliente";
+char medicamento[100] = "Medicamento";
 int limite = 9999;
 #pragma endregion
 
@@ -178,7 +179,7 @@ do
      printf(GREEN"======Medicamentos======\n\n"RESET);
      printf(" 1. Criar Medicamento\n");
      printf(" 2. Editar Medicamento\n");
-     printf(" 3. Eliminar Medicamento\n\n");
+     printf(" 3. Listar Medicamentos\n\n");
      printf(GREEN"========================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"========================\n"RESET);
@@ -189,16 +190,16 @@ do
      switch (escolha)
      {
      case 1:
-          printf("Criar\n\n");
+          criar_medicamento();
           sleep(1);
                break;
      case 2:
-          printf("Editar\n\n");
-          sleep(1);
+          editar_medicamento();
+          getch();
                break;
      case 3:
-          printf("Eliminar\n\n");
-          sleep(1);
+          listar_medicamentos();
+          getch();
                 break;
      case 9: voltar();
           break;
@@ -258,6 +259,8 @@ do
 
 #pragma endregion
 //Metodos
+#pragma region Metodos
+
 #pragma region Metodos Menu Cliente
 
 float verificar_id(){
@@ -362,4 +365,111 @@ void editar_cliente(){
 
      
 };
+#pragma endregion
+
+#pragma region Metodos Menu Cliente
+float id_medicamento(){
+     FILE *TXT;
+     for (float i = 1; i < limite; i++)
+     {
+          sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
+          if ((TXT = fopen(nome_ficheiro, "r")) == NULL)
+          {
+               fclose(TXT);
+               return i;
+          }
+     }
+}
+
+void criar_medicamento(){
+
+     clear();
+     float i;
+
+     //verificar os ficheiros existentes
+     i = id_medicamento();
+
+     //Pedir nome do cliente
+     char nome_medicamento[256];
+     printf("\tInsira o nome do medicamento que pretende adicionar: \n\n");
+     printf(CYAN"Nome Medicamento: "RESET);
+     scanf("%s", nome_medicamento);
+
+     //Abrir ficheiro
+     FILE *ficheiro;
+
+     //criar nome do ficheiro/concatenar
+     sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
+     printf(YELLOW"\n==============================="RESET);
+     printf("\nFicheiro Criado: ");
+     printf(GREEN "%s" RESET, nome_ficheiro);
+      
+      //Escrever para o ficheiro
+     ficheiro = fopen(nome_ficheiro, "w");
+
+     fprintf(ficheiro,"ID:%.0f\nNome Medicamento:%s",i, nome_medicamento);  
+     fclose(ficheiro);
+
+     printf("\nMedicamento inserido: " RESET);
+     printf(GREEN "%s" RESET, nome_medicamento);
+     printf(YELLOW"\n==============================="RESET);
+     sleep(1);
+}
+
+void listar_medicamentos(){
+
+     clear();
+     char linha[100];
+     char *result;
+     FILE *TXT;
+     printf(CYAN"Lista de Medicamentos:\n"RESET);
+     printf(YELLOW"===============================\n"RESET);
+    for (float i = 1; i < limite; i++)
+    {
+      sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) != NULL){
+               while (!feof(TXT))
+               {
+                    result = fgets(linha, 100, TXT);
+                    if(result)
+                         printf(GREEN"----> "RESET "%s", linha);
+                }
+               printf(YELLOW"\n===============================\n"RESET);
+         fclose(TXT);
+      }else
+      {
+          return;
+      }
+    }
+}
+
+void editar_medicamento(){
+     float i;
+     FILE *TXT;
+     char nome_medicamento[256];
+     listar_medicamentos();
+
+     printf(CYAN"\nInsira o ID do medicamento que pretende editar:\n"RESET);
+     scanf("%f", &i);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+     printf(CYAN"\nInsira um novo nome:\n"RESET);
+     scanf("%s", nome_medicamento);
+
+     TXT = fopen(nome_ficheiro,"w");
+
+     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_medicamento);  
+     fclose(TXT);
+     printf("\n");
+     sucesso();
+
+     
+};
+#pragma endregion
+
 #pragma endregion
