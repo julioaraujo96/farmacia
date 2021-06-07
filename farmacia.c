@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <conio.h>
 //#include <windows.h>
-
 //Cores
 #pragma region Cores
 #define RED     "\x1b[31m"
@@ -14,6 +13,8 @@
 #define CYAN    "\x1b[36m"
 #define RESET   "\x1b[0m"
 #pragma endregion
+
+
 
 //Variaveis globais
 #pragma region  Variaveis Globais
@@ -158,7 +159,7 @@ do
           listar_cliente();
           getch();
                 break;
-     case 9: voltar();        
+     case 9: voltar();
           break;
           default: input_invalido();
           sleep(1);
@@ -288,15 +289,18 @@ void criar_cliente(){
 
      //Pedir nome do cliente
      char nome_cliente[256];
-     int nif_cliente;
+     int nif_cliente, telemovel;
 
      printf("\tInsira os dados do cliente que pretende adicionar: \n\n");
      printf(CYAN"Nome Cliente: "RESET);
      discard();
      fgets(nome_cliente, 100, stdin);
-     
+
      printf(CYAN"NIF: "RESET);
      scanf("%d", &nif_cliente);
+
+     printf(CYAN"Telemovel: "RESET);
+     scanf("%d", &telemovel);
      //Abrir ficheiro
      FILE *ficheiro;
 
@@ -305,12 +309,13 @@ void criar_cliente(){
      printf(YELLOW"\n==============================="RESET);
      printf("\nFicheiro Criado: ");
      printf(GREEN "%s" RESET, nome_ficheiro);
-      
+
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
 
-     fprintf(ficheiro,"ID:%.0f\nNome:%s",i, nome_cliente);  
-     fprintf(ficheiro,"NIF: %d", nif_cliente);
+     fprintf(ficheiro,"ID:%.0f\nNome:%s",i, nome_cliente);
+     fprintf(ficheiro,"NIF:%d", nif_cliente);
+     fprintf(ficheiro,"\nTelemovel:%d", telemovel);
      fclose(ficheiro);
 
      printf("\nCliente inserido: " RESET);
@@ -351,7 +356,10 @@ void editar_cliente(){
      float i;
      FILE *TXT;
      char nome_cliente[256];
+     int nif_cliente, telemovel;
      listar_cliente();
+
+
 
      printf(CYAN"\nInsira o ID do cliente que pretende editar:\n"RESET);
      scanf("%f", &i);
@@ -365,14 +373,21 @@ void editar_cliente(){
      discard();
      fgets(nome_cliente, 100, stdin);
 
+     printf(CYAN"\nInsira um novo nif:\n"RESET);
+     scanf("%d", &nif_cliente);
+
+     printf(CYAN"\nInsira um novo telemovel:\n"RESET);
+     scanf("%d", &telemovel);
+
+
      TXT = fopen(nome_ficheiro,"w");
 
-     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_cliente);  
+     fprintf(TXT,"ID:%.0f\nNome:%sNIF:%d\nTelemovel:%d",i, nome_cliente,nif_cliente,telemovel);
      fclose(TXT);
      printf("\n");
      sucesso();
 
-     
+
 };
 #pragma endregion
 
@@ -393,17 +408,65 @@ float id_medicamento(){
 void criar_medicamento(){
 
      clear();
-     float i;
-
+     float i, id_f;
+    FILE *TXT;
      //verificar os ficheiros existentes
      i = id_medicamento();
 
      //Pedir nome do cliente
      char nome_medicamento[256];
-     printf("\tInsira o nome do medicamento que pretende adicionar: \n\n");
+     int preco;
+     printf("\tInsira os dados do medicamento que pretende adicionar: \n\n");
      printf(CYAN"Nome Medicamento: "RESET);
      discard();
      fgets(nome_medicamento, 100, stdin);
+
+     printf(CYAN"\nPreco: "RESET);
+     scanf("%d", &preco);
+
+     listar_fornecedores();
+
+     printf("Qual o ID do fornecedor?");
+     scanf("%f", &id_f);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, id_f);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+     char liner[100];
+     int found = 0;
+     int line = 1;
+        while(fgets(liner,100,TXT))//read the file string by string
+      {
+                                  if(line == 2)
+                                  {
+                                                found = 1;
+                                                //printf("says: %s", liner);
+
+                                  }
+
+                                  //printf("reading line: %d\n",line);//when a line is read tell what line it is for debug perposes.
+                                  line++;//make 'line' go up once
+
+      }
+
+      if (found == 0)
+      {
+
+                printf("erro");
+
+      }
+
+      line = line - 1;
+      //printf("\nthis file has: %d lines",line);
+
+
+
+     fclose(TXT);
+     printf("\n");
+     sucesso();
+
 
 
      //Abrir ficheiro
@@ -414,17 +477,21 @@ void criar_medicamento(){
      printf(YELLOW"\n==============================="RESET);
      printf("\nFicheiro Criado: ");
      printf(GREEN "%s" RESET, nome_ficheiro);
-      
+
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
 
-     fprintf(ficheiro,"ID:%.0f\nNome Medicamento:%s",i, nome_medicamento);  
+     fprintf(ficheiro,"ID:%.0f\nNome Medicamento:%s",i, nome_medicamento);
+     fprintf(ficheiro,"Preco:%de\n", preco);
+     fprintf(ficheiro, liner);
+
+
      fclose(ficheiro);
 
      printf("\nMedicamento inserido: " RESET);
      printf(GREEN "%s" RESET, nome_medicamento);
      printf(YELLOW"\n==============================="RESET);
-     sleep(1);
+     sleep(2);
 }
 
 void listar_medicamentos(){
@@ -444,6 +511,7 @@ void listar_medicamentos(){
                {
                     result = fgets(linha, 100, TXT);
                     if(result)
+
                          printf(GREEN"----> "RESET "%s", linha);
                 }
                printf(YELLOW"\n===============================\n"RESET);
@@ -475,12 +543,12 @@ void editar_medicamento(){
 
      TXT = fopen(nome_ficheiro,"w");
 
-     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_medicamento);  
+     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_medicamento);
      fclose(TXT);
      printf("\n");
      sucesso();
 
-     
+
 };
 #pragma endregion
 
@@ -522,11 +590,11 @@ void criar_fornecedor(){
      printf(YELLOW"\n==============================="RESET);
      printf("\nFicheiro Criado: ");
      printf(GREEN "%s" RESET, nome_ficheiro);
-      
+
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
 
-     fprintf(ficheiro,"ID:%.0f\nNome Fornecedor:%s",i, nome_fornecedor);  
+     fprintf(ficheiro,"ID:%.0f\nNome Fornecedor:%s",i, nome_fornecedor);
      fclose(ficheiro);
 
      printf("\nFornecedor inserido: " RESET);
@@ -583,13 +651,13 @@ void editar_fornecedor(){
 
      TXT = fopen(nome_ficheiro,"w");
 
-     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_fornecedor);  
+     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_fornecedor);
      fclose(TXT);
      printf("\n");
      sucesso();
 
-     
+
 };
-#pragma endregion 
+#pragma endregion
 
 #pragma endregion
