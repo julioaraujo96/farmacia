@@ -288,12 +288,15 @@ void criar_cliente(){
 
      //Pedir nome do cliente
      char nome_cliente[256];
-     printf("\tInsira o nome do cliente que pretende adicionar: \n\n");
+     int nif_cliente;
+
+     printf("\tInsira os dados do cliente que pretende adicionar: \n\n");
      printf(CYAN"Nome Cliente: "RESET);
      discard();
      fgets(nome_cliente, 100, stdin);
-     //scanf("%s", nome_cliente);
-
+     
+     printf(CYAN"NIF: "RESET);
+     scanf("%d", &nif_cliente);
      //Abrir ficheiro
      FILE *ficheiro;
 
@@ -307,6 +310,7 @@ void criar_cliente(){
      ficheiro = fopen(nome_ficheiro, "w");
 
      fprintf(ficheiro,"ID:%.0f\nNome:%s",i, nome_cliente);  
+     fprintf(ficheiro,"NIF: %d", nif_cliente);
      fclose(ficheiro);
 
      printf("\nCliente inserido: " RESET);
