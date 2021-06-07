@@ -20,6 +20,7 @@
 char nome_ficheiro[100];
 char cliente[100] = "Cliente";
 char medicamento[100] = "Medicamento";
+char fornecedor[100] = "Fornecedor";
 int limite = 9999;
 #pragma endregion
 
@@ -93,7 +94,7 @@ do
      printf(GREEN"======Fornecedores======\n\n"RESET);
      printf(" 1. Criar Fornecedor\n");
      printf(" 2. Editar Fornecedor\n");
-     printf(" 3. Eliminar Fornecedor\n\n");
+     printf(" 3. Listar Fornecedores\n\n");
      printf(GREEN"========================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"========================\n"RESET);
@@ -104,16 +105,16 @@ do
      switch (escolha)
      {
      case 1:
-          printf("Criar\n\n");
+          criar_fornecedor();
           sleep(1);
                break;
      case 2:
-          printf("Editar\n\n");
+          editar_fornecedor();
           sleep(1);
                break;
      case 3:
-          printf("Eliminar\n\n");
-          sleep(1);
+          listar_fornecedores();
+          getch();
                 break;
      case 9: voltar();
           break;
@@ -357,7 +358,8 @@ void editar_cliente(){
       return input_invalido();
 
      printf(CYAN"\nInsira um novo nome:\n"RESET);
-     scanf("%s", nome_cliente);
+     discard();
+     fgets(nome_cliente, 100, stdin);
 
      TXT = fopen(nome_ficheiro,"w");
 
@@ -370,7 +372,7 @@ void editar_cliente(){
 };
 #pragma endregion
 
-#pragma region Metodos Menu Cliente
+#pragma region Metodos Menu Medicamento
 float id_medicamento(){
      FILE *TXT;
      for (float i = 1; i < limite; i++)
@@ -464,7 +466,8 @@ void editar_medicamento(){
       return input_invalido();
 
      printf(CYAN"\nInsira um novo nome:\n"RESET);
-     scanf("%s", nome_medicamento);
+     discard();
+     fgets(nome_medicamento, 100, stdin);
 
      TXT = fopen(nome_ficheiro,"w");
 
@@ -476,5 +479,113 @@ void editar_medicamento(){
      
 };
 #pragma endregion
+
+#pragma region Metodos Menu Fornecedores
+float id_fornecedor(){
+     FILE *TXT;
+     for (float i = 1; i < limite; i++)
+     {
+          sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, i);
+          if ((TXT = fopen(nome_ficheiro, "r")) == NULL)
+          {
+               fclose(TXT);
+               return i;
+          }
+     }
+}
+
+void criar_fornecedor(){
+
+     clear();
+     float i;
+
+     //verificar os ficheiros existentes
+     i = id_fornecedor();
+
+     //Pedir nome do cliente
+     char nome_fornecedor[256];
+     printf("\tInsira o nome do fornecedor que pretende adicionar: \n\n");
+     printf(CYAN"Nome Medicamento: "RESET);
+     discard();
+     fgets(nome_fornecedor, 100, stdin);
+
+
+     //Abrir ficheiro
+     FILE *ficheiro;
+
+     //criar nome do ficheiro/concatenar
+     sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, i);
+     printf(YELLOW"\n==============================="RESET);
+     printf("\nFicheiro Criado: ");
+     printf(GREEN "%s" RESET, nome_ficheiro);
+      
+      //Escrever para o ficheiro
+     ficheiro = fopen(nome_ficheiro, "w");
+
+     fprintf(ficheiro,"ID:%.0f\nNome Fornecedor:%s",i, nome_fornecedor);  
+     fclose(ficheiro);
+
+     printf("\nFornecedor inserido: " RESET);
+     printf(GREEN "%s" RESET, nome_fornecedor);
+     printf(YELLOW"\n==============================="RESET);
+     sleep(1);
+}
+
+void listar_fornecedores(){
+
+     clear();
+     char linha[100];
+     char *result;
+     FILE *TXT;
+     printf(CYAN"Lista de Fornecedores:\n"RESET);
+     printf(YELLOW"===============================\n"RESET);
+    for (float i = 1; i < limite; i++)
+    {
+      sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) != NULL){
+               while (!feof(TXT))
+               {
+                    result = fgets(linha, 100, TXT);
+                    if(result)
+                         printf(GREEN"----> "RESET "%s", linha);
+                }
+               printf(YELLOW"\n===============================\n"RESET);
+         fclose(TXT);
+      }else
+      {
+          return;
+      }
+    }
+}
+
+void editar_fornecedor(){
+     float i;
+     FILE *TXT;
+     char nome_fornecedor[256];
+     listar_fornecedores();
+
+     printf(CYAN"\nInsira o ID do fornecedor que pretende editar:\n"RESET);
+     scanf("%f", &i);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+     printf(CYAN"\nInsira um novo nome:\n"RESET);
+     discard();
+     fgets(nome_fornecedor, 100, stdin);
+
+     TXT = fopen(nome_ficheiro,"w");
+
+     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_fornecedor);  
+     fclose(TXT);
+     printf("\n");
+     sucesso();
+
+     
+};
+#pragma endregion 
 
 #pragma endregion
