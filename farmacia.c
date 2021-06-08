@@ -2,6 +2,7 @@
 //#include <stdbool.h> --> usar bools
 #include <stdio.h>
 #include <conio.h>
+#include <stdlib.h>
 //#include <windows.h>
 //Cores
 #pragma region Cores
@@ -22,7 +23,11 @@ char nome_ficheiro[100];
 char cliente[100] = "Cliente";
 char medicamento[100] = "Medicamento";
 char fornecedor[100] = "Fornecedor";
+char venda[100] = "Vendas";
 int limite = 9999;
+int clienteadd = 0;
+char linerc1[100],linerc2[100],linerm1[100],linerm2[100];
+char linerc11[100], linerc22[100], linerm11[100], linerm22[100];
 #pragma endregion
 
 //funções reutilizaveis
@@ -227,7 +232,7 @@ do
      printf(GREEN"======Vendas======\n\n"RESET);
      printf(" 1. Criar Venda\n");
      printf(" 2. Editar Venda\n");
-     printf(" 3. Eliminar Venda\n\n");
+     printf(" 3. Listar Venda\n\n");
      printf(GREEN"====================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"====================\n"RESET);
@@ -238,7 +243,7 @@ do
      switch (escolha)
      {
      case 1:
-          printf("Criar\n\n");
+          criar_venda();
           sleep(1);
                break;
      case 2:
@@ -437,17 +442,15 @@ void criar_medicamento(){
      char liner[100];
      int found = 0;
      int line = 1;
-        while(fgets(liner,100,TXT))//read the file string by string
+        while(fgets(liner,100,TXT))
       {
                                   if(line == 2)
                                   {
                                                 found = 1;
-                                                //printf("says: %s", liner);
 
                                   }
 
-                                  //printf("reading line: %d\n",line);//when a line is read tell what line it is for debug perposes.
-                                  line++;//make 'line' go up once
+                                  line++;
 
       }
 
@@ -482,7 +485,7 @@ void criar_medicamento(){
      ficheiro = fopen(nome_ficheiro, "w");
 
      fprintf(ficheiro,"ID:%.0f\nNome Medicamento:%s",i, nome_medicamento);
-     fprintf(ficheiro,"Preco:%de\n", preco);
+     fprintf(ficheiro,"Preco:\n%d\n", preco);
      fprintf(ficheiro, liner);
 
 
@@ -657,7 +660,276 @@ void editar_fornecedor(){
      sucesso();
 
 
-};
+}
+
+float id_venda(){
+     FILE *TXT;
+     for (float i = 1; i < limite; i++)
+     {
+          sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
+          if ((TXT = fopen(nome_ficheiro, "r")) == NULL)
+          {
+               fclose(TXT);
+               return i;
+          }
+     }
+}
+
+
+void criar_venda(){
+
+     clear();
+     float i, id_c, id_m;
+    FILE *TXT;
+     //verificar os ficheiros existentes
+     i = id_venda();
+
+     //Pedir nome do cliente
+     char nome_venda[256];
+     int qmed;
+     int ii = 1;
+      char *remaining;
+      long linerm22L, precoT = 0;
+     FILE *ficheiro;
+
+     //criar nome do ficheiro/concatenar
+     sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
+     printf(YELLOW"\n==============================="RESET);
+     printf("\nFicheiro Criado: ");
+     printf(GREEN "%s" RESET, nome_ficheiro);
+
+      //Escrever para o ficheiro
+     ficheiro = fopen(nome_ficheiro, "w");
+     fprintf(ficheiro,"ID:%.0f\n",i);
+
+         if (clienteadd == 0){
+                clear();
+          add_cliente();
+          fprintf(ficheiro,linerc11,"\n");
+     fprintf(ficheiro,linerc22,"\n");
+          sleep(1);
+          }
+          else {
+            printf("\nJa adicionou um cliente nesta venda.");
+          }
+          clear();
+            printf("\nQuantos medicamentos quer adicionar a venda?");
+
+            scanf("%d",&qmed);
+
+            while (ii <= qmed){
+        clear();
+            printf("\nINSERE O MEDICAMENTO NUMERO %d",ii);
+          add_medicamento();
+
+          fprintf(ficheiro,linerm11);
+
+          linerm22L = strtol(linerm22, &remaining,10);
+
+          fprintf(ficheiro,"Preco Medicamento:%lde\n",linerm22L);
+
+
+          precoT += linerm22L;
+
+            ii++;
+            sleep(1);
+
+     }
+
+            clear();
+
+         clienteadd = 0;
+
+          sleep(1);
+
+
+
+     //Abrir ficheiro
+
+
+     fprintf(ficheiro,"Preco Total:%lde", precoT);
+
+     fclose(ficheiro);
+
+     printf("\nVenda inserida: " RESET);
+     printf(GREEN "ID:%.0f\n" RESET,i);
+     printf(GREEN "Preco Total:%lde\n" RESET,precoT);
+     printf(YELLOW"\n==============================="RESET);
+     sleep(1);
+}
+
+void add_cliente(){
+clear();
+float i, id_c;
+    FILE *TXT;
+
+     i = id_venda();
+
+     int found = 0, found2 = 0, found3 = 0;
+     int line = 1,line2 = 1,line3 = 1 ;
+
+     listar_cliente();
+     printf("\tInsira quem esta a fazer a compra: \n\n");
+
+     printf("Qual o ID do cliente?");
+     scanf("%f", &id_c);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, id_c);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+
+
+     //linha 2 (nome)
+        while(fgets(linerc1,100,TXT))//read the file string by string
+      {
+                                  if(line == 2)
+                                  {
+                                                found = 1;
+
+
+                                                strcpy(linerc11,linerc1);
+
+
+                                  }
+
+
+                                  line++;
+
+      }
+
+      if (found == 0)
+      {
+
+                printf("erro linerc1");
+
+      }
+
+      line = line - 1;
+        fclose(TXT);
+        printf("\n");
+      //linha 3 (nif)
+if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+      while(fgets(linerc2,100,TXT))//read the file string by string
+      {
+                                  if(line2 == 3)
+                                  {
+                                                found2 = 1;
+
+                                                strcpy(linerc22,linerc2);
+
+
+                                  }
+
+
+                                  line2++;
+
+      }
+
+      if (found2 == 0)
+      {
+
+                printf("erro linerc2");
+
+      }
+
+      line2 = line2 - 1;
+
+
+
+
+     fclose(TXT);
+     printf("\n");
+     clienteadd = 1;
+     sucesso();
+
+}
+
+void add_medicamento(){
+
+    float id_m;
+    FILE *TXT;
+     int found = 0, found2 = 0, found3 = 0;
+     int line = 1,line2 = 1,line3 = 1 ;
+
+     listar_medicamentos();
+
+     printf("Qual o ID do medicamento que quer adicionar a venda?");
+     scanf("%f", &id_m);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, id_m);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+//nome medicamento
+        while(fgets(linerm1,100,TXT))
+      {
+                                  if(line == 2)
+                                  {
+                                                found = 1;
+                                                strcpy(linerm11,linerm1);
+
+                                  }
+
+
+                                  line++;
+
+      }
+
+      if (found == 0)
+      {
+
+                printf("erro m1, and %s",linerm1);
+
+      }
+
+      line = line - 1;
+
+        fclose(TXT);
+        printf("\n");
+
+     //preco medicamento
+if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+      while(fgets(linerm2,100,TXT))
+      {
+                                  if(line2 == 4)
+                                  {
+                                                found2 = 1;
+
+                                        strcpy(linerm22,linerm2);
+
+
+                                  }
+
+
+                                  line2++;
+
+      }
+
+      if (found2 == 0)
+      {
+
+                printf("erro m2");
+
+      }
+
+      line2 = line2 - 1;
+
+
+     fclose(TXT);
+     printf("\n");
+     sucesso();
+
+}
+
+
+
+;
 #pragma endregion
 
 #pragma endregion
