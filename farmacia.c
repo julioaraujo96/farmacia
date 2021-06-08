@@ -580,7 +580,7 @@ void criar_fornecedor(){
      //Pedir nome do cliente
      char nome_fornecedor[256];
      printf("\tInsira o nome do fornecedor que pretende adicionar: \n\n");
-     printf(CYAN"Nome Medicamento: "RESET);
+     printf(CYAN"Nome Fornecedor: "RESET);
      discard();
      fgets(nome_fornecedor, 100, stdin);
 
