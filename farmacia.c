@@ -19,13 +19,12 @@
 
 //Variaveis globais
 #pragma region  Variaveis Globais
-char nome_ficheiro[100];
+char nome_ficheiro[100], nome_ficheiro2[100];
 char cliente[100] = "Cliente";
 char medicamento[100] = "Medicamento";
 char fornecedor[100] = "Fornecedor";
 char venda[100] = "Vendas";
 int limite = 9999;
-int clienteadd = 0;
 char linerc1[100],linerc2[100],linerm1[100],linerm2[100];
 char linerc11[100], linerc22[100], linerm11[100], linerm22[100];
 #pragma endregion
@@ -231,8 +230,7 @@ do
      nome_programa();
      printf(GREEN"======Vendas======\n\n"RESET);
      printf(" 1. Criar Venda\n");
-     printf(" 2. Editar Venda\n");
-     printf(" 3. Listar Venda\n\n");
+     printf(" 2. Listar Venda\n\n");
      printf(GREEN"====================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"====================\n"RESET);
@@ -247,13 +245,9 @@ do
           sleep(1);
                break;
      case 2:
-          printf("Editar\n\n");
-          sleep(1);
+          listar_venda();
+          getch();
                break;
-     case 3:
-          printf("Eliminar\n\n");
-          sleep(1);
-                break;
      case 9: voltar();
           break;
           default: input_invalido();
@@ -462,7 +456,6 @@ void criar_medicamento(){
       }
 
       line = line - 1;
-      //printf("\nthis file has: %d lines",line);
 
 
 
@@ -494,7 +487,7 @@ void criar_medicamento(){
      printf("\nMedicamento inserido: " RESET);
      printf(GREEN "%s" RESET, nome_medicamento);
      printf(YELLOW"\n==============================="RESET);
-     sleep(2);
+     sleep(1);
 }
 
 void listar_medicamentos(){
@@ -527,30 +520,74 @@ void listar_medicamentos(){
 }
 
 void editar_medicamento(){
-     float i;
+     float i,id_f;
      FILE *TXT;
      char nome_medicamento[256];
+     int preco;
      listar_medicamentos();
 
      printf(CYAN"\nInsira o ID do medicamento que pretende editar:\n"RESET);
      scanf("%f", &i);
 
-     sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
-
-      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
-      return input_invalido();
-
      printf(CYAN"\nInsira um novo nome:\n"RESET);
      discard();
      fgets(nome_medicamento, 100, stdin);
 
-     TXT = fopen(nome_ficheiro,"w");
+     printf(CYAN"\nInsira um novo preco:\n"RESET);
+     scanf("%d", &preco);
 
-     fprintf(TXT,"ID:%.0f\nNome:%s",i, nome_medicamento);
+     listar_fornecedores();
+     printf(CYAN"\nQual o fornecedor novo a inserir?:\n"RESET);
+     scanf("%f", &id_f);
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", fornecedor, id_f);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      return input_invalido();
+
+     char liner[100];
+     int found = 0;
+     int line = 1;
+        while(fgets(liner,100,TXT))
+      {
+                                  if(line == 2)
+                                  {
+                                                found = 1;
+                                  }
+
+                                  line++;
+
+      }
+
+      if (found == 0)
+      {
+
+                printf("erro");
+
+      }
+
+      line = line - 1;
+
+
+
      fclose(TXT);
-     printf("\n");
-     sucesso();
 
+     FILE *ficheiro;
+
+     sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, i);
+     ficheiro = fopen(nome_ficheiro, "w");
+
+     fprintf(ficheiro,"ID:%.0f\nNome Medicamento:%s",i, nome_medicamento);
+     fprintf(ficheiro,"Preco:\n%d\n", preco);
+     fprintf(ficheiro, liner);
+
+
+     fclose(ficheiro);
+
+     printf("\nMedicamento editado: " RESET);
+     printf(GREEN "%s" RESET, nome_medicamento);
+     printf(YELLOW"\n==============================="RESET);
+     sleep(2);
 
 };
 #pragma endregion
@@ -702,13 +739,13 @@ void criar_venda(){
      ficheiro = fopen(nome_ficheiro, "w");
      fprintf(ficheiro,"ID:%.0f\n",i);
 
-         if (clienteadd == 0){
+
                 clear();
           add_cliente();
           fprintf(ficheiro,linerc11,"\n");
      fprintf(ficheiro,linerc22,"\n");
           sleep(1);
-          }
+
           else {
             printf("\nJa adicionou um cliente nesta venda.");
           }
@@ -722,11 +759,11 @@ void criar_venda(){
             printf("\nINSERE O MEDICAMENTO NUMERO %d",ii);
           add_medicamento();
 
-          fprintf(ficheiro,linerm11);
+          fprintf(ficheiro,"N:%d - %s",ii,linerm11);
 
           linerm22L = strtol(linerm22, &remaining,10);
 
-          fprintf(ficheiro,"Preco Medicamento:%lde\n",linerm22L);
+          fprintf(ficheiro,"N:%d - Preco Medicamento:%lde\n",ii,linerm22L);
 
 
           precoT += linerm22L;
@@ -738,7 +775,7 @@ void criar_venda(){
 
             clear();
 
-         clienteadd = 0;
+
 
           sleep(1);
 
@@ -756,6 +793,35 @@ void criar_venda(){
      printf(GREEN "Preco Total:%lde\n" RESET,precoT);
      printf(YELLOW"\n==============================="RESET);
      sleep(1);
+}
+
+void listar_venda(){
+
+clear();
+     char linha[100];
+     char *result;
+     FILE *TXT;
+     printf(CYAN"Lista de Vendas:\n"RESET);
+     printf(YELLOW"===============================\n"RESET);
+    for (float i = 1; i < limite; i++)
+    {
+      sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
+
+      if ((TXT = fopen(nome_ficheiro,"r")) != NULL){
+               while (!feof(TXT))
+               {
+                    result = fgets(linha, 100, TXT);
+                    if(result)
+                         printf(GREEN"----> "RESET "%s", linha);
+                }
+               printf(YELLOW"\n===============================\n"RESET);
+         fclose(TXT);
+      }else
+      {
+          return;
+      }
+    }
+
 }
 
 void add_cliente(){
