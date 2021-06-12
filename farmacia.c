@@ -27,6 +27,7 @@ char venda[100] = "Vendas";
 int limite = 9999;
 char linerc1[100],linerc2[100],linerm1[100],linerm2[100];
 char linerc11[100], linerc22[100], linerm11[100], linerm22[100];
+int erro = 0;
 #pragma endregion
 
 //funções reutilizaveis
@@ -222,6 +223,7 @@ do
 #pragma region Menu Vendas
 void vendas() {
 
+clear();
     char escolhastr[3];
      int escolha;
 do
@@ -234,9 +236,11 @@ do
      printf(GREEN"====================\n\n"RESET);
      printf(" 9." GREEN " <<" YELLOW " Voltar\n\n" RESET);
      printf(GREEN"====================\n"RESET);
+
      scanf("%s",&escolhastr);
 
      escolha = atoi(escolhastr);
+
 
      switch (escolha)
      {
@@ -257,6 +261,8 @@ do
      } while (escolha != 9);
 
 }
+
+
 #pragma endregion
 
 #pragma endregion
@@ -346,6 +352,7 @@ void listar_cliente(){
          fclose(TXT);
       }else
       {
+          fclose(TXT);
           return;
       }
     }
@@ -717,7 +724,6 @@ void criar_venda(){
 
      clear();
      float i, id_c, id_m;
-    FILE *TXT;
      //verificar os ficheiros existentes
      i = id_venda();
 
@@ -729,26 +735,43 @@ void criar_venda(){
       long linerm22L, precoT = 0;
      FILE *ficheiro;
 
-     //criar nome do ficheiro/concatenar
+//criar nome do ficheiro/concatenar
      sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
      printf(YELLOW"\n==============================="RESET);
      printf("\nFicheiro Criado: ");
      printf(GREEN "%s" RESET, nome_ficheiro);
-
+    sleep(1);
       //Escrever para o ficheiro
      ficheiro = fopen(nome_ficheiro, "w");
      fprintf(ficheiro,"ID:%.0f\n",i);
 
-
                 clear();
           add_cliente();
+          sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
+          if (erro == 0){
           fprintf(ficheiro,linerc11,"\n");
      fprintf(ficheiro,linerc22,"\n");
           sleep(1);
+        }
+        else if (erro == 1){
 
-          else {
-            printf("\nJa adicionou um cliente nesta venda.");
-          }
+                fclose(ficheiro);
+        sleep(1);
+                if (remove(nome_ficheiro) == 0){
+      printf("Deleted successfully");}
+
+   else{
+        fclose(ficheiro);
+        printf("file: %s\n",nome_ficheiro);
+      perror("Unable to delete the file");
+      sleep(1);
+
+
+   }
+   erro = 0;
+            return;
+
+        }
           clear();
             printf("\nQuantos medicamentos quer adicionar a venda?");
 
@@ -758,7 +781,8 @@ void criar_venda(){
         clear();
             printf("\nINSERE O MEDICAMENTO NUMERO %d",ii);
           add_medicamento();
-
+sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
+            if (erro == 0){
           fprintf(ficheiro,"N:%d - %s",ii,linerm11);
 
           linerm22L = strtol(linerm22, &remaining,10);
@@ -770,24 +794,37 @@ void criar_venda(){
 
             ii++;
             sleep(1);
+}
+else if (erro == 1){
 
+     fclose(ficheiro);
+        sleep(1);
+                if (remove(nome_ficheiro) == 0){
+      printf("Deleted successfully");}
+
+   else{
+        fclose(ficheiro);
+        printf("file: %s\n",nome_ficheiro);
+      perror("Unable to delete the file");
+      sleep(1);
+
+
+   }
+   erro = 0;
+            return;
+
+}
      }
-
-            clear();
-
-
-
-          sleep(1);
-
-
 
      //Abrir ficheiro
 
 
      fprintf(ficheiro,"Preco Total:%lde", precoT);
 
-     fclose(ficheiro);
 
+
+     fclose(ficheiro);
+    clear();
      printf("\nVenda inserida: " RESET);
      printf(GREEN "ID:%.0f\n" RESET,i);
      printf(GREEN "Preco Total:%lde\n" RESET,precoT);
@@ -842,11 +879,15 @@ float i, id_c;
 
      sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, id_c);
 
-      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
-      return input_invalido();
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL){
+            erro = 1;
+      //return input_invalido();
 
+fclose(TXT);
 
-
+}
+else{
+    erro = 0;
      //linha 2 (nome)
         while(fgets(linerc1,100,TXT))//read the file string by string
       {
@@ -875,9 +916,15 @@ float i, id_c;
       line = line - 1;
         fclose(TXT);
         printf("\n");
+        }
       //linha 3 (nif)
-if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
-      return input_invalido();
+if ((TXT = fopen(nome_ficheiro,"r")) == NULL){
+        erro = 1;
+      //return input_invalido();
+fclose(TXT);
+      }
+      else{
+            erro = 0;
       while(fgets(linerc2,100,TXT))//read the file string by string
       {
                                   if(line2 == 3)
@@ -908,9 +955,8 @@ if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
 
      fclose(TXT);
      printf("\n");
-     clienteadd = 1;
      sucesso();
-
+}
 }
 
 void add_medicamento(){
@@ -927,9 +973,13 @@ void add_medicamento(){
 
      sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, id_m);
 
-      if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+      if ((TXT = fopen(nome_ficheiro,"r")) == NULL){
+          erro = 1;
       return input_invalido();
 
+        }
+        else{
+                erro = 0;
 //nome medicamento
         while(fgets(linerm1,100,TXT))
       {
@@ -956,11 +1006,14 @@ void add_medicamento(){
 
         fclose(TXT);
         printf("\n");
-
+}
      //preco medicamento
-if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
+if ((TXT = fopen(nome_ficheiro,"r")) == NULL){
+    erro = 1;
       return input_invalido();
-
+}
+else{
+        erro = 0;
       while(fgets(linerm2,100,TXT))
       {
                                   if(line2 == 4)
@@ -990,7 +1043,7 @@ if ((TXT = fopen(nome_ficheiro,"r")) == NULL)
      fclose(TXT);
      printf("\n");
      sucesso();
-
+}
 }
 
 
