@@ -40,6 +40,10 @@ void voltar(){printf(YELLOW "A voltar..." RESET);}
 void clear(){ system("cls");}
 void discard(){scanf("%*c");}
 void escolher(){printf(CYAN"\nEscolha: "RESET);}
+void press_enter(){
+     printf(MAGENTA "\nPressione ENTER para voltar..." RESET);
+     getch();
+     }
 //void messagebox(){MessageBox(NULL, TEXT("Mensagem"),TEXT("Console Error"), MB_OK);}  se quiser uma messagebox
 #pragma endregion
 //Menus
@@ -120,7 +124,7 @@ do
                break;
      case 3:
           listar_fornecedores();
-          getch();
+          press_enter();
                 break;
      case 9: voltar();
           break;
@@ -158,11 +162,11 @@ do
             sleep(1);
                break;
      case 2: editar_cliente();
-             getch();
+             press_enter();
                break;
      case 3:
           listar_cliente();
-          getch();
+          press_enter();
                 break;
      case 9: voltar();
           break;
@@ -203,11 +207,11 @@ do
                break;
      case 2:
           editar_medicamento();
-          getch();
+          press_enter();
                break;
      case 3:
           listar_medicamentos();
-          getch();
+          press_enter();
                 break;
      case 9: voltar();
           break;
@@ -250,7 +254,7 @@ do
                break;
      case 2:
           listar_venda();
-          getch();
+          press_enter();
                break;
      case 9: voltar();
           break;
@@ -755,25 +759,17 @@ void criar_venda(){
         }
         else if (erro == 1){
 
-                fclose(ficheiro);
-        sleep(1);
-                if (remove(nome_ficheiro) == 0){
-      printf("Deleted successfully");}
-
-   else{
         fclose(ficheiro);
-        printf("file: %s\n",nome_ficheiro);
-      perror("Unable to delete the file");
-      sleep(1);
-
-
-   }
+        sleep(1);
+        char Path[256] = "./";
+        strcat(Path,ficheiro);
+               rmdir(Path);
    erro = 0;
             return;
 
         }
           clear();
-            printf("\nQuantos medicamentos quer adicionar a venda?");
+            printf(CYAN"\nQuantos medicamentos quer adicionar a venda?"RESET);
 
             scanf("%d",&qmed);
 
@@ -874,7 +870,7 @@ float i, id_c;
      listar_cliente();
      printf("\tInsira quem esta a fazer a compra: \n\n");
 
-     printf("Qual o ID do cliente?");
+     printf(CYAN"Qual o ID do cliente?"RESET);
      scanf("%f", &id_c);
 
      sprintf(nome_ficheiro, "%s%03.0f.txt", cliente, id_c);
@@ -968,7 +964,7 @@ void add_medicamento(){
 
      listar_medicamentos();
 
-     printf("Qual o ID do medicamento que quer adicionar a venda?");
+     printf(CYAN"Qual o ID do medicamento que quer adicionar a venda?"RESET);
      scanf("%f", &id_m);
 
      sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, id_m);
