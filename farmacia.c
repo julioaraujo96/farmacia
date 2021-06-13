@@ -210,6 +210,7 @@ do
           press_enter();
                break;
      case 3:
+         clear();
           listar_medicamentos();
           press_enter();
                 break;
@@ -503,7 +504,7 @@ void criar_medicamento(){
 
 void listar_medicamentos(){
 
-     clear();
+     //clear();
      char linha[100];
      char *result;
      FILE *TXT;
@@ -757,14 +758,23 @@ void criar_venda(){
      fprintf(ficheiro,linerc22,"\n");
           sleep(1);
         }
-        else if (erro == 1){
+ else if (erro == 1){
 
+     fclose(ficheiro);
+                if (remove(nome_ficheiro) == 0){
+      printf(GREEN"Criação de Venda Cancelada. Ficheiro Apagado com Sucesso"RESET);
+      sleep(1);}
+
+
+   else{
         fclose(ficheiro);
-        sleep(1);
-        char Path[256] = "./";
-        strcat(Path,ficheiro);
-               rmdir(Path);
-   erro = 0;
+     printf(RED"Impossivel eliminar o ficheiro %s",nome_ficheiro);
+      perror(":"RESET);
+      sleep(2);
+
+
+   }
+         erro = 0;
             return;
 
         }
@@ -774,8 +784,11 @@ void criar_venda(){
             scanf("%d",&qmed);
 
             while (ii <= qmed){
-        clear();
-            printf("\nINSERE O MEDICAMENTO NUMERO %d",ii);
+                    clear();
+        listar_medicamentos();
+
+
+            printf(CYAN"\t\nQual o ID do Medicamento Numero %d? "RESET,ii);
           add_medicamento();
 sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
             if (erro == 0){
@@ -796,12 +809,14 @@ else if (erro == 1){
      fclose(ficheiro);
         sleep(1);
                 if (remove(nome_ficheiro) == 0){
-      printf("Deleted successfully");}
+      printf(GREEN"Criação de Venda Cancelada. Ficheiro Apagado com Sucesso"RESET);
+      sleep(1);}
+
 
    else{
         fclose(ficheiro);
-        printf("file: %s\n",nome_ficheiro);
-      perror("Unable to delete the file");
+     printf(RED"Impossivel eliminar o ficheiro %s",nome_ficheiro);
+      perror(":"RESET);
       sleep(1);
 
 
@@ -812,7 +827,7 @@ else if (erro == 1){
 }
      }
 
-     //Abrir ficheiro
+
 
 
      fprintf(ficheiro,"Preco Total:%lde", precoT);
@@ -906,6 +921,8 @@ else{
       {
 
                 printf("erro linerc1");
+                sleep(1);
+                return;
 
       }
 
@@ -941,6 +958,8 @@ fclose(TXT);
       {
 
                 printf("erro linerc2");
+                sleep(1);
+                return;
 
       }
 
@@ -962,9 +981,7 @@ void add_medicamento(){
      int found = 0, found2 = 0, found3 = 0;
      int line = 1,line2 = 1,line3 = 1 ;
 
-     listar_medicamentos();
 
-     printf(CYAN"Qual o ID do medicamento que quer adicionar a venda?"RESET);
      scanf("%f", &id_m);
 
      sprintf(nome_ficheiro, "%s%03.0f.txt", medicamento, id_m);
@@ -995,6 +1012,8 @@ void add_medicamento(){
       {
 
                 printf("erro m1, and %s",linerm1);
+                sleep(1);
+                return;
 
       }
 
@@ -1030,6 +1049,8 @@ else{
       {
 
                 printf("erro m2");
+                sleep(1);
+                return;
 
       }
 
