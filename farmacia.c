@@ -737,7 +737,7 @@ void criar_venda(){
      int qmed;
      int ii = 1;
       char *remaining;
-      long linerm22L, precoT = 0;
+      int linerm22i,precoT = 0;
      FILE *ficheiro;
 
 //criar nome do ficheiro/concatenar
@@ -759,7 +759,7 @@ void criar_venda(){
           sleep(1);
         }
  else if (erro == 1){
-
+        printf(RED"Erro ao criar venda.\n"RESET);
      fclose(ficheiro);
                 if (remove(nome_ficheiro) == 0){
       printf(GREEN"Criação de Venda Cancelada. Ficheiro Apagado com Sucesso"RESET);
@@ -792,14 +792,12 @@ void criar_venda(){
           add_medicamento();
 sprintf(nome_ficheiro, "%s%03.0f.txt", venda, i);
             if (erro == 0){
-          fprintf(ficheiro,"N:%d - %s",ii,linerm11);
+                    linerm22i = strtol(linerm22, &remaining,10);
 
-          linerm22L = strtol(linerm22, &remaining,10);
-
-          fprintf(ficheiro,"N:%d - Preco Medicamento:%lde\n",ii,linerm22L);
+          fprintf(ficheiro,"N:%d-%s;Preco:%de\n",ii,linerm11,linerm22i);
 
 
-          precoT += linerm22L;
+          precoT += linerm22i;
 
             ii++;
             sleep(1);
@@ -830,15 +828,15 @@ else if (erro == 1){
 
 
 
-     fprintf(ficheiro,"Preco Total:%lde", precoT);
+     fprintf(ficheiro,"Preco Total:%de", precoT);
 
 
 
      fclose(ficheiro);
     clear();
-     printf("\nVenda inserida: " RESET);
+     printf("\nVenda inserida: ");
      printf(GREEN "ID:%.0f\n" RESET,i);
-     printf(GREEN "Preco Total:%lde\n" RESET,precoT);
+     printf(GREEN"Preco Total:%de\n"RESET,precoT);
      printf(YELLOW"\n==============================="RESET);
      sleep(1);
 }
